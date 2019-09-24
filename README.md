@@ -1,3 +1,3 @@
 # CaffeMe
 
-Our first casier project
+Express, and Sequelize
