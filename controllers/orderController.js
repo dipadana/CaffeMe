@@ -1,4 +1,4 @@
-const {Menu, Order, Customer} = require('../models');
+const {Menu, Order, Customer, Checkout} = require('../models');
 
 class OrderController {
 
@@ -13,6 +13,9 @@ class OrderController {
   }
 
   static addMenu(req,res){
+    // Menambahkan data kedalam tabel customer,
+    // agar IDnya bisa ditangkap
+    let CustomerId;
     Customer.create({
       name: req.body.CustomerName,
       phone: req.body.phone,
@@ -26,15 +29,18 @@ class OrderController {
       }})
     })
     .then(customer => {
-      let CustomerId = customer.dataValues.id
+      // Menangkap semua data yang datang dari 
+      // form pesanan dan ID Customer yang baru ditambahkan
+      CustomerId = customer.dataValues.id
       let MenuId = req.body.MenuId
       let qty = [];
+      // Menghapus semua string kosong yang 
+      // datang dari form pesanan
       for(let i = 0; i < req.body.qty.length; i++){
         if(req.body.qty[i] !== ''){
           qty.push(req.body.qty[i])
         }
       }
-
       let data = [];
       for(let i = 0; i < MenuId.length; i++){
         data.push({
@@ -43,12 +49,81 @@ class OrderController {
           qty: qty[i]
         })
       }
-
-      // res.send({CustomerId,MenuId,qty});
       return Order.bulkCreate(data)
     })
-    .then(order => {
-      res.send(order)
+    .then(orders => {
+      res.redirect(`/order/receipt/${CustomerId}`)
+    })
+    .catch(err => {
+      res.send(err);
+    })
+  }
+
+  static receiptPage(req,res){
+    let CustomerId = req.params.id
+    Customer.findOne({where : {id:CustomerId},include:Menu})
+    .then(customer => {
+      // res.send(customer)
+      res.render('pages/orders/receipt',{customer})
+    })
+    .catch(err => {
+      res.send(err);
+    })
+  }
+
+  static editPage(req,res){
+    let CustomerId = req.query.CustomerId
+    let MenuId = req.query.MenuId
+    let qty = req.query.qty
+    let MenuName = req.query.MenuName
+    // res.send({CustomerId,MenuId,qty})
+    res.render('pages/orders/editReceipt', {CustomerId,MenuId,qty,MenuName})
+  }
+
+  static edit(req,res){
+    Order.update({
+      qty : req.body.qty
+    }, {
+      where : {
+        CustomerId : req.body.CustomerId,
+        MenuId : req.body.MenuId
+      }
+    })
+    .then(() => {
+      res.redirect(`/order/receipt/${req.body.CustomerId}`)
+    })
+    .catch(err => {
+      res.send(err);
+    })
+  }
+
+  static edit(req,res){
+    Order.update({
+      qty : req.body.qty
+    }, {
+      where : {
+        CustomerId : req.body.CustomerId,
+        MenuId : req.body.MenuId
+      }
+    })
+    .then(() => {
+      res.redirect(`/order/receipt/${req.body.CustomerId}`)
+    })
+    .catch(err => {
+      res.send(err);
+    })
+  }
+
+  static delete(req,res){
+    Order.destroy({
+      where : {
+        CustomerId : req.query.CustomerId,
+        MenuId : req.query.MenuId
+      }
+    })
+    .then(() => {
+      // res.send('deleted')
+      res.redirect(`/order/receipt/${req.query.CustomerId}`)
     })
     .catch(err => {
       res.send(err);
@@ -59,6 +134,43 @@ class OrderController {
     Customer.findAll({include : Menu})
     .then(Customer => {
       res.send(Customer)
+    })
+    .catch(err => {
+      res.send(err);
+    })
+  }
+
+  static checkout(req,res){
+    let data = [];
+    let totalSum;
+    for(let i = 0; i < req.body.MenuId.length; i++){
+      data.push({
+        MenuId : req.body.MenuId[i],
+        MenuName : req.body.name[i],
+        price : req.body.price[i],
+        qty : req.body.qty[i],
+        total : Number(req.body.price[i])*Number(req.body.qty[i]),
+        CustomerName : req.body.CustomerName,
+        CustomerId : req.body.CustomerId
+      })
+    }
+    Checkout.bulkCreate(data)
+    .then(() => {
+      return Checkout.sum('total',{where : {
+        CustomerId : req.body.CustomerId
+      }})
+    })
+    .then(sum => {
+      totalSum = sum.toString()
+      return Checkout.findAll({where : {
+        CustomerId : req.body.CustomerId
+      }})
+    })
+    .then(customerData => {
+      res.send({customerData,totalSum})
+    })
+    .catch(err => {
+      res.send(err);
     })
   }
 

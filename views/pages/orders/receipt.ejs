@@ -1,0 +1,33 @@
+<%- include('../../partials/head') %>
+
+  <p><%= customer.name %></p>
+  <p><%= customer.phone %></p>
+  <p><%= customer.email %></p>
+  <br>
+
+  <form action="/order/checkout" method="POST">
+  <% for(let i = 0; i < customer.Menus.length; i++){ %>
+
+    <p><%= customer.Menus[i].name %></p>
+    <p><%= customer.Menus[i].price %></p>
+    <p><%= customer.Menus[i].Order.qty %></p>
+    <a href="/order/receipt/edit/?qty=<%= customer.Menus[i].Order.qty %>&CustomerId=<%= customer.Menus[i].Order.CustomerId %>&MenuId=<%= customer.Menus[i].Order.MenuId %>&MenuName=<%= customer.Menus[i].name %>">edit</a>
+    <a href="/order/receipt/delete/?qty=<%= customer.Menus[i].Order.qty %>&CustomerId=<%= customer.Menus[i].Order.CustomerId %>&MenuId=<%= customer.Menus[i].Order.MenuId %>&MenuName=<%= customer.Menus[i].name %>">delete</a>
+    <br>
+    
+    <input type="hidden" name="MenuId" value="<%= customer.Menus[i].id %>">
+    <input type="hidden" name="name" value="<%= customer.Menus[i].name %>">
+    <input type="hidden" name="price" value="<%= customer.Menus[i].price %>">
+    <input type="hidden" name="qty" value="<%= customer.Menus[i].Order.qty %>">
+    
+    <% } %>
+    <br>
+    
+    <input type="hidden" name="CustomerName" value="<%= customer.name %>">
+    <input type="hidden" name="CustomerId" value="<%= customer.id %>">
+    
+
+    <input type="submit" value="Checkout">
+  </form>
+
+<%- include('../../partials/footer') %>
