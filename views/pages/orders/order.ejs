@@ -1,0 +1,21 @@
+<%- include('../../partials/head') %>
+
+<form method="POST" action="/order">
+
+  <label for="">name</label>
+  <input type="text" name="CustomerName"><br>
+  <label for="">phone</label>
+  <input type="number" name="phone"><br>
+  <label for="">email</label>
+  <input type="text" name="email"><br>
+
+  <% for(let i = 0; i < menu.length; i++){ %>
+  <input type="checkbox" name="MenuId" id="<%= menu[i].dataValues.name %>" value="<%= menu[i].dataValues.id %>">
+  <input type="number" name="qty">
+  <label for="<%= menu[i].dataValues.name %>"><%= menu[i].dataValues.name %></label>
+  <% } %>
+  
+  <input type="submit" value="Order">
+</form>
+
+<%- include('../../partials/footer') %>
