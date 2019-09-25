@@ -13,4 +13,4 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/menu', menuRouter);
 app.use('/order', orderRouter);
 
-app.listen(port, () => console.log(`Caffe Me listening on port ${port}!`)) 
+app.listen(port, () => console.log(`Cafe Me listening on port ${port}!`)) 

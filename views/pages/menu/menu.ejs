@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cafe Me</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+     
+<div class="container">
+        <h2>Best Menu of Cafe Me</h2>
+        <p>we serve the tastiest thing you can savor in the whole world</p>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Menu</th>
+          <th>Price</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+          <% allMenus.forEach( menu => { %>
+            
+        <tr>
+            <td><%= menu.dataValues.name %></td>
+            <td><%= menu.dataValues.price %></td>
+            
+            <td><a href="/menu/menus/edit/<%= menu.id %>">Edit</a>  |  <a href="/menu/menus/delete/<%= menu.id %>">Delete</a></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

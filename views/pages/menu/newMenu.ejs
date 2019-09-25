@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CafeMe Menu</title>
+</head>
+<body>
+
+    <% err.forEach((err, index) => {
+        let msg = 
+        `<p style="color:red">${err}</p>`
+        __append(msg) 
+    })%>
+    <h1>Form Create Menu</h1>
+
+    <form method = "POST" action = "/menu/menus/add">
+        <label>
+           Menu Name : <input type = "text" name = "menu_name" placeholder = "input new menu here"/>
+        </label>
+        <br/>
+        <label>
+            Price : <input type = "number" name = "price" placeholder = "input "/>
+        </label>
+        <br/>
+        
+        <input type = "submit" value = "save"/>
+    </form>
+</body>
+</html>
