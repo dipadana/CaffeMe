@@ -1,5 +1,5 @@
 const routes = require('express').Router();
-const MenuController = require('../controllers/menuController');
+
 
 //HOME
 routes.get('/', MenuController.allMenu)
@@ -28,6 +28,7 @@ routes.post('/menus/edit/:id', MenuController.update)
 
 // //delete
 routes.get('/menus/delete:id', MenuController.delete)
+
 
 
 

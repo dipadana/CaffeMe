@@ -1,0 +1,14 @@
+<%- include('../../partials/head') %>
+
+  <form method="POST" action="/order/receipt/edit">
+
+    <label for="">name</label>
+    <input type="text" name="name" value="<%= MenuName %>">
+    <label for="">quantity</label>
+    <input type="number" name="qty" value="<%= qty %>">
+    <input type="text" name="CustomerId" value="<%= CustomerId %>">
+    <input type="text" name="MenuId" value="<%= MenuId %>">
+    <input type="submit" value="edit">
+  </form>
+
+<%- include('../../partials/footer') %>
