@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CafeMe Menu</title>
+</head>
+<body>
+    
+        <h1>Form Edit Menu</h1>
+    
+        <form method = "POST" action = "/menu/menus/edit/<%= selectedMenu.id%>">
+            <label>
+               Menu Name : <input type = "text" name = "menu_name" placeholder = "input new menu here" value = "<%= selectedMenu.name%>"/>
+            </label>
+            <br/>
+            <label>
+                Price : <input type = "number" name = "price" placeholder = "input" value = "<%= selectedMenu.price%>" />
+            </label>
+            <br/>
+            
+            <input type = "submit" value = "save"/>
+        </form>
+</body>
+</html>

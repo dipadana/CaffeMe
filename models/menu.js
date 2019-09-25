@@ -5,7 +5,10 @@ module.exports = (sequelize, DataTypes) => {
   class Menu extends Model {}
 
   Menu.init({
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull : false
+    },
     price: DataTypes.INTEGER
   }, {sequelize, modelName:'Menu'});
   Menu.associate = function(models) {

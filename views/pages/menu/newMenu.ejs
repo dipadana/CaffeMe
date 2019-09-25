@@ -8,14 +8,14 @@
 </head>
 <body>
 
-    <% errors.forEach((err, index) => {
+    <% err.forEach((err, index) => {
         let msg = 
         `<p style="color:red">${err}</p>`
         __append(msg) 
-    {)%>
+    })%>
     <h1>Form Create Menu</h1>
 
-    <form method = "POST" action = "/menus/add">
+    <form method = "POST" action = "/menu/menus/add">
         <label>
            Menu Name : <input type = "text" name = "menu_name" placeholder = "input new menu here"/>
         </label>

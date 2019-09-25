@@ -1,32 +1,33 @@
 const routes = require('express').Router();
-const menuController = require('../controllers/menuController');
+const MenuController = require('../controllers/menuController');
 
 //HOME
-routes.get('/', menuController.allMenu)
+routes.get('/', MenuController.allMenu)
 
 
 //=================CRUD MENU=============//
 
 
-//create
+// //create
 routes.get('/menus/add', (req, res) => {
-    let errors = []
+    let err = []
 
     for (const key in req.query) {
-        errors.push(req.query[key])
+        err.push(req.query[key])
     }
-    res.render('newMenu', {errors})
+    res.render('pages/menu/newMenu', {err})
 })
-routes.post('/menus/add', menuController.create)
+
+routes.post('/menus/add', MenuController.create)
 
 
-//edit & update
-routes.get('/menus/edit/:id', menuController.edit)
-routes.post('/menus/edit/:id', menuController.update)
+// //edit & update
+routes.get('/menus/edit/:id', MenuController.editPage)
+routes.post('/menus/edit/:id', MenuController.update)
 
 
-//delete
-routes.get('/menus/delete:id', menuController.delete)
+// //delete
+routes.get('/menus/delete:id', MenuController.delete)
 
 
 
