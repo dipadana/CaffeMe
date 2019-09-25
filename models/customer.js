@@ -13,4 +13,4 @@ module.exports = (sequelize, DataTypes) => {
     Customer.belongsToMany(models.Menu, {through:models.Order});
   };
   return Customer;
-};
+}; 
