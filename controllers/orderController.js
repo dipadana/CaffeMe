@@ -8,7 +8,7 @@ class OrderController {
       res.render('pages/orders/order',{menu});
     })
     .catch(err => {
-      res,send(err);
+      res.send(err.message);
     })
   }
 
@@ -55,7 +55,7 @@ class OrderController {
       res.redirect(`/order/receipt/${CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -67,7 +67,7 @@ class OrderController {
       res.render('pages/orders/receipt',{customer})
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -93,7 +93,7 @@ class OrderController {
       res.redirect(`/order/receipt/${req.body.CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -110,7 +110,7 @@ class OrderController {
       res.redirect(`/order/receipt/${req.body.CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -126,7 +126,7 @@ class OrderController {
       res.redirect(`/order/receipt/${req.query.CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -136,7 +136,7 @@ class OrderController {
       res.send(Customer)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -170,7 +170,10 @@ class OrderController {
       res.send({customerData,totalSum})
     })
     .catch(err => {
+      console.log(err);
+      
       res.send(err);
+      
     })
   }
 

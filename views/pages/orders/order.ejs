@@ -1,21 +1,70 @@
 <%- include('../../partials/head') %>
 
-<form method="POST" action="/order">
 
-  <label for="">name</label>
-  <input type="text" name="CustomerName"><br>
-  <label for="">phone</label>
-  <input type="number" name="phone"><br>
-  <label for="">email</label>
-  <input type="text" name="email"><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cafe Me</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+      body,html{
+     height:100%;
+      }
+  </style>
+</head>
+<body>
 
-  <% for(let i = 0; i < menu.length; i++){ %>
-  <input type="checkbox" name="MenuId" id="<%= menu[i].dataValues.name %>" value="<%= menu[i].dataValues.id %>">
-  <input type="number" name="qty">
-  <label for="<%= menu[i].dataValues.name %>"><%= menu[i].dataValues.name %></label>
-  <% } %>
+
+    <div class="mt-4 container">
+        <div class="container h-100">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="col-12 mx-auto">
+                        <div class="jumbotron">
+                                <h1 style="text-align: center">Customer Order Form</h1>
+                                <form method="POST" action="/order">
+                                    <div class="form-group">
+                                      <label for="fullname">Fullname</label>
+                                      <input type="text" name="fullname" class="form-control" id="fullname" placeholder= "Input your full name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone</label>
+                                        <input type="number" name="phone" class="form-control" id="phone" placeholder="Input your phone number"  >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" name="email" class="form-control" id="email" placeholder="Input your email"  >
+                                    </div>
+                                   
+                                    <% for(let i = 0; i < menu.length; i++){ %>
+                                      <input type="checkbox" name="MenuId" id="<%= menu[i].dataValues.name %>" value="<%= menu[i].dataValues.id %>">
+                                      <input type="number" name="qty">
+                                      <label for="<%= menu[i].dataValues.name %>"><%= menu[i].dataValues.name %></label>
+                                      <% } %>
+                                      
+
+
+                                    <input type="submit" class="btn btn-primary" value="Order">
+                                </form>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
   
-  <input type="submit" value="Order">
-</form>
+</body>
+</html>
+
+
+
+
+
+ 
 
 <%- include('../../partials/footer') %>
+

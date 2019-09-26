@@ -3,7 +3,7 @@ const {Menu} = require('../models');
 class MenuController {
 
   static allMenu(req,res){
-    Menu.findAll({order : ["id"]})
+  Menu.findAll({order : [["id", "DESC"]] /* [['name', 'DESC']]*/})
     .then(allMenus => {
       
       // res.send(allMenus)
@@ -16,6 +16,8 @@ class MenuController {
   }
 
   static create(req, res) {
+    console.log(req.body);
+    
     Menu.findOrCreate({where : {
       name : req.body.menu_name,
       price: req.body.price
@@ -35,10 +37,6 @@ class MenuController {
   static editPage(req, res) {
     Menu.findByPk(req.params.id)
     .then(selectedMenu => {
-      console.log(selectedMenu);
-      // console.log(req.params.id);
-      
-      
       res.render('pages/menu/editMenu', {selectedMenu})
     })
     .catch(err => {
@@ -65,7 +63,7 @@ class MenuController {
     })
   }
 
-  static delete() {
+  static delete(req, res) {
     Menu.destroy({where : {
       id : req.params.id
     }})
