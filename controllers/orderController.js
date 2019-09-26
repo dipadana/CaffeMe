@@ -24,7 +24,6 @@ class OrderController {
     .then(() => {
       return Customer.findOne({where : {
         name: req.body.CustomerName,
-        phone: req.body.phone,
         email: req.body.email
       }})
     })
