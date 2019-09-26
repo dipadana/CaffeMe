@@ -10,7 +10,7 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: false }
 }));
 
 app.use(express.json())
@@ -40,7 +40,7 @@ app.post('/login', (req,res) => {
       if(data.dataValues.password === req.body.password){
         req.session.user = req.body.username
         req.session.position = data.dataValues.position
-        console.log(req.session)
+        // console.log(req.session)
         res.redirect('/')
       }
       else{

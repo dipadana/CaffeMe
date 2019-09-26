@@ -9,6 +9,13 @@ module.exports = {
       position : 'admin',
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      username : 'eli',
+      password : '123456',
+      position : 'manager',
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   },
 
