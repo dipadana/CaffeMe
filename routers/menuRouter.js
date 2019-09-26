@@ -1,6 +1,17 @@
 const routes = require('express').Router();
 const MenuController = require('../controllers/menuController');
 
+const managerMiddleware = (req,res,next) => {
+  if(req.session.position === 'manager'){
+    next()
+  }
+  else{
+    res.redirect('/')
+  }
+}
+
+routes.use(managerMiddleware);
+
 //HOME
 routes.get('/', MenuController.allMenu)
 
