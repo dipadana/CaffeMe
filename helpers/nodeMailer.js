@@ -22,6 +22,5 @@ function emailSender(email,text = 'Ini nota pembayaran'){
   });
 }
 
-emailSender('dipaviii2@gmail.com');
 
 module.exports = emailSender;

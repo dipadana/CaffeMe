@@ -167,19 +167,25 @@ class OrderController {
     })
     .then(sum => {
       totalSum = sum.toString()
-      return Checkout.findOne({where : {
+      return Checkout.findAll({where : {
         CustomerId : req.body.CustomerId
       }})
     })
     .then(customerData => {
-      console.log(customerData,'<<<<<<<<<<<<<<<<<<<<<<<,,,, here');
       dataCheckout = customerData
       Order.destroy({where : {
         CustomerId : req.body.CustomerId
       }})
     })
     .then(() => {
-      // nodeMailer()
+
+      let sendToEmail = 'Nota Pembayaran \n';
+      for(let i = 0; i < dataCheckout.length; i++){
+        sendToEmail = sendToEmail + ' ' + dataCheckout[i].dataValues.MenuName + ' ' + dataCheckout[i].dataValues.total +'\n'
+      }
+      sendToEmail += 'Total belanjaan anda adalah : ' + totalSum;
+      nodeMailer('dipadana@gmail.com', sendToEmail)
+
       res.send({dataCheckout,totalSum})
     })
     .catch(err => {
