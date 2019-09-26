@@ -12,7 +12,5 @@ routes.get('/receipt/:id', OrderController.receiptPage); // id = CustomerId
 
 routes.post('/checkout', OrderController.checkout);
 
-routes.get('/test', OrderController.testOrder);
-
 
 module.exports = routes;

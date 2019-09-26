@@ -1,4 +1,5 @@
 const {Menu, Order, Customer, Checkout} = require('../models');
+const nodeMailer = require('../helpers/nodeMailer');
 
 class OrderController {
 
@@ -16,15 +17,16 @@ class OrderController {
     // Menambahkan data kedalam tabel customer,
     // agar IDnya bisa ditangkap
     let CustomerId;
+    let TimeNow = new Date()
     Customer.create({
       name: req.body.CustomerName,
       phone: req.body.phone,
-      email: req.body.email
+      email: req.body.email,
+      createdAt : TimeNow
     })
     .then(() => {
       return Customer.findOne({where : {
-        name: req.body.CustomerName,
-        email: req.body.email
+        createdAt : TimeNow
       }})
     })
     .then(customer => {
@@ -96,22 +98,22 @@ class OrderController {
     })
   }
 
-  static edit(req,res){
-    Order.update({
-      qty : req.body.qty
-    }, {
-      where : {
-        CustomerId : req.body.CustomerId,
-        MenuId : req.body.MenuId
-      }
-    })
-    .then(() => {
-      res.redirect(`/order/receipt/${req.body.CustomerId}`)
-    })
-    .catch(err => {
-      res.send(err);
-    })
-  }
+  // static edit(req,res){
+  //   Order.update({
+  //     qty : req.body.qty
+  //   }, {
+  //     where : {
+  //       CustomerId : req.body.CustomerId,
+  //       MenuId : req.body.MenuId
+  //     }
+  //   })
+  //   .then(() => {
+  //     res.redirect(`/order/receipt/${req.body.CustomerId}`)
+  //   })
+  //   .catch(err => {
+  //     res.send(err);
+  //   })
+  // }
 
   static delete(req,res){
     Order.destroy({
@@ -123,16 +125,6 @@ class OrderController {
     .then(() => {
       // res.send('deleted')
       res.redirect(`/order/receipt/${req.query.CustomerId}`)
-    })
-    .catch(err => {
-      res.send(err);
-    })
-  }
-
-  static testOrder(req,res){
-    Customer.findAll({include : Menu})
-    .then(Customer => {
-      res.send(Customer)
     })
     .catch(err => {
       res.send(err);
@@ -175,17 +167,19 @@ class OrderController {
     })
     .then(sum => {
       totalSum = sum.toString()
-      return Checkout.findAll({where : {
+      return Checkout.findOne({where : {
         CustomerId : req.body.CustomerId
       }})
     })
     .then(customerData => {
+      console.log(customerData,'<<<<<<<<<<<<<<<<<<<<<<<,,,, here');
       dataCheckout = customerData
       Order.destroy({where : {
         CustomerId : req.body.CustomerId
       }})
     })
     .then(() => {
+      // nodeMailer()
       res.send({dataCheckout,totalSum})
     })
     .catch(err => {
