@@ -27,7 +27,15 @@
     <input type="hidden" name="CustomerId" value="<%= customer.id %>">
     
 
-    <input type="submit" value="Checkout">
+    <% if(customer.Menus.length == 0 ) { %>
+
+      <a href="/order">home</a>
+
+    <% } else { %>
+      
+      <input type="submit" value="Checkout">
+    <% } %>
+
   </form>
 
 <%- include('../../partials/footer') %>

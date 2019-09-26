@@ -143,16 +143,30 @@ class OrderController {
   static checkout(req,res){
     let data = [];
     let totalSum;
-    for(let i = 0; i < req.body.MenuId.length; i++){
+    let dataCheckout;
+    if(typeof req.body.MenuId === 'string'){
       data.push({
-        MenuId : req.body.MenuId[i],
-        MenuName : req.body.name[i],
-        price : req.body.price[i],
-        qty : req.body.qty[i],
-        total : Number(req.body.price[i])*Number(req.body.qty[i]),
+        MenuId : req.body.MenuId,
+        MenuName : req.body.name,
+        price : req.body.price,
+        qty : req.body.qty,
+        total : Number(req.body.price)*Number(req.body.qty),
         CustomerName : req.body.CustomerName,
         CustomerId : req.body.CustomerId
       })
+    }
+    else{
+      for(let i = 0; i < req.body.MenuId.length; i++){
+        data.push({
+          MenuId : req.body.MenuId[i],
+          MenuName : req.body.name[i],
+          price : req.body.price[i],
+          qty : req.body.qty[i],
+          total : Number(req.body.price[i])*Number(req.body.qty[i]),
+          CustomerName : req.body.CustomerName,
+          CustomerId : req.body.CustomerId
+        })
+      }
     }
     Checkout.bulkCreate(data)
     .then(() => {
@@ -167,7 +181,13 @@ class OrderController {
       }})
     })
     .then(customerData => {
-      res.send({customerData,totalSum})
+      dataCheckout = customerData
+      Order.destroy({where : {
+        CustomerId : req.body.CustomerId
+      }})
+    })
+    .then(() => {
+      res.send({dataCheckout,totalSum})
     })
     .catch(err => {
       res.send(err);
