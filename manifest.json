@@ -6,5 +6,5 @@
   "display": "fullscreen",
   "orientation": "potrait",
   "scope": "/",
-  "start_url": "/"
+  "start_url": "/login"
 }
