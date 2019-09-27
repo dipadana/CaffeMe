@@ -9,7 +9,7 @@ class OrderController {
       res.render('pages/orders/order',{menu});
     })
     .catch(err => {
-      res,send(err);
+      res.send(err.message);
     })
   }
 
@@ -56,7 +56,7 @@ class OrderController {
       res.redirect(`/order/receipt/${CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -68,7 +68,7 @@ class OrderController {
       res.render('pages/orders/receipt',{customer})
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
@@ -94,26 +94,9 @@ class OrderController {
       res.redirect(`/order/receipt/${req.body.CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
-
-  // static edit(req,res){
-  //   Order.update({
-  //     qty : req.body.qty
-  //   }, {
-  //     where : {
-  //       CustomerId : req.body.CustomerId,
-  //       MenuId : req.body.MenuId
-  //     }
-  //   })
-  //   .then(() => {
-  //     res.redirect(`/order/receipt/${req.body.CustomerId}`)
-  //   })
-  //   .catch(err => {
-  //     res.send(err);
-  //   })
-  // }
 
   static delete(req,res){
     Order.destroy({
@@ -127,14 +110,14 @@ class OrderController {
       res.redirect(`/order/receipt/${req.query.CustomerId}`)
     })
     .catch(err => {
-      res.send(err);
+      res.send(err.message);
     })
   }
 
   static checkout(req,res){
     let data = [];
     let totalSum;
-    let dataCheckout;
+    let customerData;
     if(typeof req.body.MenuId === 'string'){
       data.push({
         MenuId : req.body.MenuId,
@@ -171,8 +154,8 @@ class OrderController {
         CustomerId : req.body.CustomerId
       }})
     })
-    .then(customerData => {
-      dataCheckout = customerData
+    .then(dataCheckout => {
+      customerData = dataCheckout
       Order.destroy({where : {
         CustomerId : req.body.CustomerId
       }})
@@ -180,17 +163,24 @@ class OrderController {
     .then(() => {
 
       let sendToEmail = 'Nota Pembayaran \n';
-      for(let i = 0; i < dataCheckout.length; i++){
-        sendToEmail = sendToEmail + ' ' + dataCheckout[i].dataValues.MenuName + ' ' + dataCheckout[i].dataValues.total +'\n'
+      for(let i = 0; i < customerData.length; i++){
+        sendToEmail = sendToEmail + ' ' + customerData[i].dataValues.MenuName + ' ' + customerData[i].dataValues.total +'\n'
       }
       sendToEmail += 'Total belanjaan anda adalah : ' + totalSum;
       nodeMailer('dipadana@gmail.com', sendToEmail)
 
-      res.send({dataCheckout,totalSum})
+      res.render("pages/orders/invoice", {customerData,totalSum} )
     })
     .catch(err => {
+      console.log(err);
+      
       res.send(err);
+      
     })
+  }
+
+  static purchased(req, res) {
+    res.render('pages/orders/purchased')
   }
 
 }

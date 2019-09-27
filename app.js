@@ -28,7 +28,7 @@ const loginMiddleware = (req,res,next) => {
 }
 
 app.get('/login', (req,res) => {
-  res.render('loginTest')
+  res.render('pages/user/loginPage')
 });
 
 app.post('/login', (req,res) => {
@@ -57,7 +57,7 @@ app.use(loginMiddleware)
 
 app.get('/', (req, res) => {
   console.log(req.session)
-  res.render('home')
+  res.render('pages/user/home')
 })
 
 app.use('/menu', menuRouter);

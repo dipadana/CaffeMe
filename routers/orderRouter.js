@@ -12,5 +12,9 @@ routes.get('/receipt/:id', OrderController.receiptPage); // id = CustomerId
 
 routes.post('/checkout', OrderController.checkout);
 
+routes.get('/purchased', OrderController.purchased)
+
+
+
 
 module.exports = routes;

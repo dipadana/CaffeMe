@@ -16,6 +16,7 @@ routes.use(managerMiddleware);
 routes.get('/', MenuController.allMenu)
 
 
+
 //=================CRUD MENU=============//
 
 
@@ -30,6 +31,14 @@ routes.get('/menus/add', (req, res) => {
 })
 
 routes.post('/menus/add', MenuController.create)
+// routes.post('/menus/add', (req, res) => {
+//     console.log(req.body);
+    
+// })
+
+
+
+
 
 
 // //edit & update
@@ -38,7 +47,7 @@ routes.post('/menus/edit/:id', MenuController.update)
 
 
 // //delete
-routes.get('/menus/delete:id', MenuController.delete)
+routes.get('/menus/delete/:id', MenuController.delete)
 
 
 
