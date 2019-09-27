@@ -9,7 +9,8 @@ app.use(express.urlencoded({ extended: true }))
 app.set('view engine', 'ejs')
 app.use('/public', express.static('public'))
 
-app.get('/', (req, res) => res.send('Hello World!'))
+// app.get('/', (req, res) => res.send('Hello World!'))
+app.get('/', (req, res) => res.render('pages/user/home'))
 app.get('/login', (req, res) => {
 res.render('pages/user/loginPage')
 })

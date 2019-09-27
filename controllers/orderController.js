@@ -167,7 +167,8 @@ class OrderController {
       }})
     })
     .then(customerData => {
-      res.send({customerData,totalSum})
+      // res.send({customerData,totalSum})
+      res.render("pages/orders/invoice", {customerData,totalSum} )
     })
     .catch(err => {
       console.log(err);
@@ -175,6 +176,10 @@ class OrderController {
       res.send(err);
       
     })
+  }
+
+  static purchased(req, res) {
+    res.render('pages/orders/purchased')
   }
 
 }
