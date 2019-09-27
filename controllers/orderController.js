@@ -1,4 +1,5 @@
 const {Menu, Order, Customer, Checkout} = require('../models');
+const nodeMailer = require('../helpers/nodeMailer');
 
 class OrderController {
 
@@ -16,16 +17,16 @@ class OrderController {
     // Menambahkan data kedalam tabel customer,
     // agar IDnya bisa ditangkap
     let CustomerId;
+    let TimeNow = new Date()
     Customer.create({
       name: req.body.CustomerName,
       phone: req.body.phone,
-      email: req.body.email
+      email: req.body.email,
+      createdAt : TimeNow
     })
     .then(() => {
       return Customer.findOne({where : {
-        name: req.body.CustomerName,
-        phone: req.body.phone,
-        email: req.body.email
+        createdAt : TimeNow
       }})
     })
     .then(customer => {
@@ -97,23 +98,6 @@ class OrderController {
     })
   }
 
-  static edit(req,res){
-    Order.update({
-      qty : req.body.qty
-    }, {
-      where : {
-        CustomerId : req.body.CustomerId,
-        MenuId : req.body.MenuId
-      }
-    })
-    .then(() => {
-      res.redirect(`/order/receipt/${req.body.CustomerId}`)
-    })
-    .catch(err => {
-      res.send(err.message);
-    })
-  }
-
   static delete(req,res){
     Order.destroy({
       where : {
@@ -130,29 +114,33 @@ class OrderController {
     })
   }
 
-  static testOrder(req,res){
-    Customer.findAll({include : Menu})
-    .then(Customer => {
-      res.send(Customer)
-    })
-    .catch(err => {
-      res.send(err.message);
-    })
-  }
-
   static checkout(req,res){
     let data = [];
     let totalSum;
-    for(let i = 0; i < req.body.MenuId.length; i++){
+    let customerData;
+    if(typeof req.body.MenuId === 'string'){
       data.push({
-        MenuId : req.body.MenuId[i],
-        MenuName : req.body.name[i],
-        price : req.body.price[i],
-        qty : req.body.qty[i],
-        total : Number(req.body.price[i])*Number(req.body.qty[i]),
+        MenuId : req.body.MenuId,
+        MenuName : req.body.name,
+        price : req.body.price,
+        qty : req.body.qty,
+        total : Number(req.body.price)*Number(req.body.qty),
         CustomerName : req.body.CustomerName,
         CustomerId : req.body.CustomerId
       })
+    }
+    else{
+      for(let i = 0; i < req.body.MenuId.length; i++){
+        data.push({
+          MenuId : req.body.MenuId[i],
+          MenuName : req.body.name[i],
+          price : req.body.price[i],
+          qty : req.body.qty[i],
+          total : Number(req.body.price[i])*Number(req.body.qty[i]),
+          CustomerName : req.body.CustomerName,
+          CustomerId : req.body.CustomerId
+        })
+      }
     }
     Checkout.bulkCreate(data)
     .then(() => {
@@ -166,8 +154,21 @@ class OrderController {
         CustomerId : req.body.CustomerId
       }})
     })
-    .then(customerData => {
-      // res.send({customerData,totalSum})
+    .then(dataCheckout => {
+      customerData = dataCheckout
+      Order.destroy({where : {
+        CustomerId : req.body.CustomerId
+      }})
+    })
+    .then(() => {
+
+      let sendToEmail = 'Nota Pembayaran \n';
+      for(let i = 0; i < customerData.length; i++){
+        sendToEmail = sendToEmail + ' ' + customerData[i].dataValues.MenuName + ' ' + customerData[i].dataValues.total +'\n'
+      }
+      sendToEmail += 'Total belanjaan anda adalah : ' + totalSum;
+      nodeMailer('dipadana@gmail.com', sendToEmail)
+
       res.render("pages/orders/invoice", {customerData,totalSum} )
     })
     .catch(err => {

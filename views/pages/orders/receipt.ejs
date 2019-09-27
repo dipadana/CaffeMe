@@ -28,6 +28,7 @@
                     <% for(let i = 0; i < customer.Menus.length; i++){ %>
                   <tr>
 
+
                     <td><%= customer.Menus[i].name %></td>
                     <td><%= customer.Menus[i].price %></td>
                     <td><%= customer.Menus[i].Order.qty %></td>
@@ -49,9 +50,21 @@
                   
                   <input type="hidden" name="CustomerName" value="<%= customer.name %>">
                   <input type="hidden" name="CustomerId" value="<%= customer.id %>">
-                  <div class="wrapper">
+                  
+                  
+
+    <% if(customer.Menus.length == 0 ) { %>
+
+      <a href="/order">home</a>
+
+    <% } else { %>
+      
+      <div class="wrapper">
                       <input type="submit" value="Checkout" style="text-align: right" class="btn btn-primary">
                   </div>
+    <% } %>
+
+
   </form>
 
 <%- include('../../partials/footer') %>
